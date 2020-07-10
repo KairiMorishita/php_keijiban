@@ -19,7 +19,7 @@ if(isset($_POST["send_message"])){
 
         //userが空の場合、名無しにする
         if(empty($user)){
-          $user = "名無し";
+            $user = "名無し";
         }
         //日付を取得する
         $postDate = date('Y-m-d H:i:s');
