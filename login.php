@@ -13,18 +13,18 @@ $errorMessage = "";
 
 // ログインボタンが押された場合
 if (isset($_POST["login"])) {
-    // 1. ユーザIDの入力チェック
+    // 1. メールアドレスの入力チェック
     if (empty($_POST["email"])) {  // emptyは値が空のとき
-        $errorMessage = 'ユーザーIDが未入力です。';
+        $errorMessage = 'メールアドレスが未入力です。';
     } else if (empty($_POST["password"])) {
         $errorMessage = 'パスワードが未入力です。';
     }
 
     if (!empty($_POST["email"]) && !empty($_POST["password"])) {
-        // 入力したユーザIDを格納
+        // 入力したメールアドレスを格納
         $email = $_POST["email"];
 
-        // 2. ユーザIDとパスワードが入力されていたら認証する
+        // 2. メールアドレスとパスワードが入力されていたら認証する
         $dsn = sprintf('mysql: host=%s; dbname=%s; charset=utf8', $db['localhost'], $db['mysql']);
 
         // 3. エラー処理
