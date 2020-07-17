@@ -6,7 +6,7 @@ session_start();
 $db['host'] = "localhost";  // DBサーバのURL
 $db['user'] = "root";  // ユーザー名
 $db['pass'] = "root";  // ユーザー名のパスワード
-$db['dbname'] = "mysql";  // データベース名
+$db['dbname'] = "php_keijiban";  // データベース名
 
 // エラーメッセージの初期化
 $errorMessage = "";
@@ -31,7 +31,7 @@ if (isset($_POST["login"])) {
         try {
             $pdo = new PDO($dsn, $db['user'], $db['pass'], array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION));
 
-            $stmt = $pdo->prepare('SELECT * FROM userData WHERE name = ?');
+            $stmt = $pdo->prepare('SELECT * FROM users WHERE name = ?');
             $stmt->execute(array($email));
 
             $password = $_POST["password"];
@@ -42,7 +42,7 @@ if (isset($_POST["login"])) {
 
                     // 入力したIDのユーザー名を取得
                     $id = $row['id'];
-                    $sql = "SELECT * FROM userData WHERE id = $id";  //入力したIDからユーザー名を取得
+                    $sql = "SELECT * FROM users WHERE email = $email";  //入力したメールアドレスからユーザー名を取得
                     $stmt = $pdo->query($sql);
                     foreach ($stmt as $row) {
                         $row['name'];  // ユーザー名
@@ -52,12 +52,12 @@ if (isset($_POST["login"])) {
                     exit();  // 処理終了
                 } else {
                     // 認証失敗
-                    $errorMessage = 'ユーザーIDあるいはパスワードに誤りがあります。';
+                    $errorMessage = 'メールアドレスあるいはパスワードに誤りがあります。';
                 }
             } else {
                 // 4. 認証成功なら、セッションIDを新規に発行する
                 // 該当データなし
-                $errorMessage = 'ユーザーIDあるいはパスワードに誤りがあります。';
+                $errorMessage = 'メールアドレスあるいはパスワードに誤りがあります。';
             }
         } catch (PDOException $e) {
             $errorMessage = 'データベースエラー';
@@ -81,7 +81,7 @@ if (isset($_POST["login"])) {
             <fieldset>
                 <legend>ログインフォーム</legend>
                 <div><font color="#ff0000"><?php echo htmlspecialchars($errorMessage, ENT_QUOTES); ?></font></div>
-                <label for="email">メールアドレス</label><input type="text" id="email" name="email" placeholder="ユーザーIDを入力" value="<?php if (!empty($_POST["email"])) {echo htmlspecialchars($_POST["email"], ENT_QUOTES);} ?>">
+                <label for="email">メールアドレス</label><input type="text" id="email" name="email" placeholder="メールアドレスを入力" value="<?php if (!empty($_POST["email"])) {echo htmlspecialchars($_POST["email"], ENT_QUOTES);} ?>">
                 <br>
                 <label for="password">パスワード</label><input type="password" id="password" name="password" value="" placeholder="パスワードを入力">
                 <br>
