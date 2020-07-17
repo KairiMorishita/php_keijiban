@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+//ログイン状態チェック
+if(!isset($_SESSION["NAME"])){
+    header("Location: Logout.php");
+    exit;
+}
 
 // ファイルの指定
 $dataFile = 'datafile.dat';
@@ -47,6 +54,12 @@ $post_list = array_reverse($post_list);
 </head>
 <body>
 <h1>PHP掲示板</h1>
+
+<!-- ユーザーIDにHTMLタグが含まれても良いようにエスケープする -->
+<p>ようこそ<u><?php echo htmlspecialchars($_SESSION["NAME"], ENT_QUOTES); ?></u>さん</p>  <!-- ユーザー名をechoで表示 -->
+    <ul>
+        <li><a href="Logout.php">ログアウト</a></li>
+    </ul>
 
 <!--ここで投稿内容を送信する-->
 <form action="" method="post">
