@@ -1,5 +1,5 @@
 <?php
-require 'password.php';   // password_hash()はphp 5.5.0以降の関数のため、バージョンが古くて使えない場合に使用
+require 'password.php';
 // セッション開始
 session_start();
 
@@ -29,6 +29,11 @@ if (isset($_POST["signUp"])) {
     if (mb_strlen($_POST['password']) < 8) {
         $errorMessage = 'パスワードは8文字以上で設定してください。';
     }
+
+    // メールアドレスが正しい形式であるかチェック
+    if (!preg_match( '/^[0-9a-z_.\/?-]+@([0-9a-z-]+\.)+[0-9a-z-]+$/', $_POST['email']) ) {
+		$errorMessage = "「メールアドレス」は正しい形式で入力してください。";
+	}
 
     if ($errorMessage == "") {
         // 新規登録内容を格納
