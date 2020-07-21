@@ -25,28 +25,19 @@ if (isset($_POST["login"])) {
         $email = $_POST["email"];
 
         // 2. メールアドレスとパスワードが入力されていたら認証する
-        $dsn = sprintf('mysql: host=%s; dbname=%s; charset=utf8', $db['localhost'], $db['mysql']);
+        $dsn = sprintf('mysql: host=%s; dbname=%s; charset=utf8', $db['host'], $db['dbname']);
 
-        // 3. エラー処理
+        // 3. 登録処理
         try {
             $pdo = new PDO($dsn, $db['user'], $db['pass'], array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION));
 
-            $stmt = $pdo->prepare('SELECT * FROM users WHERE name = ?');
+            $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ?');
             $stmt->execute(array($email));
 
             $password = $_POST["password"];
-
             if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 if (password_verify($password, $row['password'])) {
                     session_regenerate_id(true);
-
-                    // 入力したIDのユーザー名を取得
-                    $id = $row['id'];
-                    $sql = "SELECT * FROM users WHERE email = $email";  //入力したメールアドレスからユーザー名を取得
-                    $stmt = $pdo->query($sql);
-                    foreach ($stmt as $row) {
-                        $row['name'];  // ユーザー名
-                    }
                     $_SESSION["NAME"] = $row['name'];
                     header("Location: index.php");  // メイン画面へ遷移
                     exit();  // 処理終了
@@ -63,7 +54,7 @@ if (isset($_POST["login"])) {
             $errorMessage = 'データベースエラー';
             //$errorMessage = $sql;
             // $e->getMessage() でエラー内容を参照可能（デバッグ時のみ表示）
-            // echo $e->getMessage();
+             echo $e->getMessage();
         }
     }
 }
