@@ -39,6 +39,7 @@ if (isset($_POST["login"])) {
                 if (password_verify($password, $row['password'])) {
                     session_regenerate_id(true);
                     $_SESSION["NAME"] = $row['name'];
+                    $_SESSION["ID"] = $row['id'];
                     header("Location: index.php");  // メイン画面へ遷移
                     exit();  // 処理終了
                 } else {
@@ -46,15 +47,14 @@ if (isset($_POST["login"])) {
                     $errorMessage = 'メールアドレスあるいはパスワードに誤りがあります。';
                 }
             } else {
-                // 4. 認証成功なら、セッションIDを新規に発行する
                 // 該当データなし
-                $errorMessage = 'メールアドレスあるいはパスワードに誤りがあります。';
+                $errorMessage = 'メールアドレスが存在しません。';
             }
         } catch (PDOException $e) {
             $errorMessage = 'データベースエラー';
-            //$errorMessage = $sql;
+            // $errorMessage = $sql;
             // $e->getMessage() でエラー内容を参照可能（デバッグ時のみ表示）
-             echo $e->getMessage();
+            // echo $e->getMessage();
         }
     }
 }
