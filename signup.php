@@ -1,5 +1,4 @@
 <?php
-require 'password.php';
 // セッション開始
 session_start();
 
@@ -53,7 +52,7 @@ if (isset($_POST["signUp"])) {
             $stmt->execute(array($username, $email, password_hash($password, PASSWORD_DEFAULT)));  // パスワードのハッシュ化を行う（今回は文字列のみなのでbindValue(変数の内容が変わらない)を使用せず、直接excuteに渡しても問題ない）
             $user_id = $pdo->lastinsertid();  // 登録した(DB側でauto_incrementした)IDを$user_idに入れる
             $_SESSION["NAME"] = $username;
-            header("Location: index.php");  // メイン画面へ遷移
+            header("Location: login.php");  // ログイン画面へ遷移
             exit();  // 処理終了
 
         } catch (PDOException $e) {

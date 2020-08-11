@@ -1,5 +1,4 @@
 <?php
- require 'password.php';   // password_verfy()はphp 5.5.0以降の関数のため、バージョンが古くて使えない場合に使用
 // セッション開始
 session_start();
 
@@ -8,13 +7,10 @@ $db['user'] = "root";  // ユーザー名
 $db['pass'] = "root";  // ユーザー名のパスワード
 $db['dbname'] = "php_keijiban";  // データベース名
 
-// エラーメッセージの初期化
-$errorMessage = "";
-
 // ログインボタンが押された場合
 if (isset($_POST["login"])) {
     // 1. メールアドレスの入力チェック
-    if (empty($_POST["email"])) {  // emptyは値が空のとき
+    if (empty($_POST["email"])) {
         $errorMessage = 'メールアドレスが未入力です。';
     } else if (empty($_POST["password"])) {
         $errorMessage = 'パスワードが未入力です。';
@@ -24,10 +20,10 @@ if (isset($_POST["login"])) {
         // 入力したメールアドレスを格納
         $email = $_POST["email"];
 
-        // 2. メールアドレスとパスワードが入力されていたら認証する
+        // メールアドレスとパスワードが入力されていたら認証する
         $dsn = sprintf('mysql: host=%s; dbname=%s; charset=utf8', $db['host'], $db['dbname']);
 
-        // 3. 登録処理
+        // ログイン処理
         try {
             $pdo = new PDO($dsn, $db['user'], $db['pass'], array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION));
 
