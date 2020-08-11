@@ -20,7 +20,8 @@ return htmlspecialchars($s,ENT_QUOTES,'UTF-8');
 $dsn = sprintf('mysql: host=%s; dbname=%s; charset=utf8', $db['host'], $db['dbname']);
 
 //投稿ボタンが押された場合
-if(isset($_POST["send_message"])){
+if(isset($_POST["message"])){
+    if (!empty($_POST["message"])) {
     //送信されたname="message"とname="user_name"の値を取得する
     $message = trim($_POST['message']);
     $user = trim($_SESSION["NAME"]);
@@ -34,6 +35,9 @@ if(isset($_POST["send_message"])){
         $errorMessage = 'データベースエラー';
         // $e->getMessage() でエラー内容を参照可能（デバッグ時のみ表示）
         echo $e->getMessage();
+    }
+    }else{
+        echo '投稿内容が未入力です。';
     }
 }
 
@@ -58,7 +62,7 @@ if(isset($_POST["id"])){
         $pdo = new PDO($dsn, $db['user'], $db['pass'], array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION));
         $stmt = $pdo->prepare("DELETE FROM posts Where id = :id");
         $stmt->execute(array(':id' => $_POST["id"]));
-        echo '削除完了しました。';
+        header("Location: index.php");
     } catch(PDOException $e) {
         $errorMessage = 'データベースエラー';
         // $e->getMessage() でエラー内容を参照可能（デバッグ時のみ表示）
@@ -73,15 +77,14 @@ if(isset($_POST["id"])){
 <head lang="ja">
 <meta charset="utf-8">
 <title>PHP掲示板</title>
-<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 <h1>PHP掲示板</h1>
 
-<p>ようこそ<u><?php echo htmlspecialchars($_SESSION["NAME"], ENT_QUOTES); ?></u>さん</p>  <!-- ユーザー名をechoで表示 -->
-    <ul>
-        <li><a href="Logout.php">ログアウト</a></li>
-    </ul>
+<!-- ユーザー名をechoで表示 -->
+<p>ようこそ<u><?php echo htmlspecialchars($_SESSION["NAME"], ENT_QUOTES); ?></u>さん</p>
+
+<p><a href="Logout.php">ログアウト</a></p>
 
 <!--ここで投稿内容を送信する-->
 <form action="" method="post">
